@@ -28,8 +28,12 @@ async def get_datasets_for_user(user_id):
     datasets = dbUtils.get_datasets_for_user(user_id)
     payload = []
     for dataset in datasets:
+        print(dataset)
+        thumbnail_hash = dbUtils.get_thumbnail_hash_for_dataset(dataset.dataset_id)
+        thumbnail =dataPorcessor.download_flow(thumbnail_hash)
+        labels_received = dbUtils.count_labels_for_dataset(dataset.dataset_id)
         accuracy = dbUtils.calculate_dataset_accuracy(dataset.dataset_id)
-        payload.append({"dataset_id": dataset.dataset_id, "name": dataset.name, "description": dataset.description, "label_options": dataset.label_options, "accuracy": accuracy})
+        payload.append({"dataset_id": dataset.dataset_id, "name": dataset.name, "description": dataset.description, "label_options": dataset.label_options, "accuracy": accuracy, "thumbnail": thumbnail, "labels_received": labels_received})
     return payload
 
 @router.get("/get_feed/{amount}")
@@ -37,6 +41,7 @@ async def get_feed(amount):
     randomDatas = dbUtils.get_feed(amount)
     payloads = []
     for randomData in randomDatas:
+        print(f"getting {randomData.ipfs_hash}")
         labels = dbUtils.get_labels_for_datapoint(randomData.data_id)
         imgdata = dataPorcessor.download_flow(randomData.ipfs_hash)
         payload = {"url": imgdata,
@@ -54,9 +59,14 @@ async def test(data_id):
 async def test(dataset_id):
     return dbUtils.calculate_dataset_accuracy(dataset_id)
 
+@router.get("/amountofvotesfordataset")
+# TODO:
+
+
+
 @router.post("/upload_data")
 async def upload_data(dataset_id, file: UploadFile = File(...)):
-    try:
+    # try:
         allowed_types = [".jpg", ".jpeg", ".png"]
 
         file_ext = os.path.splitext(file.filename)[1].lower()
@@ -71,9 +81,9 @@ async def upload_data(dataset_id, file: UploadFile = File(...)):
 
 
 
-    except Exception as e:
-        print(f"Error in add_image: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+    # except Exception as e:
+    #     print(f"Error in add_image: {str(e)}")
+    #     raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @router.post("/label")
 async def label(labelData: Label):
@@ -86,6 +96,7 @@ async def label(labelData: Label):
 
 @router.post("/add_dataset")
 async def add_dataset(dataset: Dataset):
+    print(dataset)
     dataset_id = dbUtils.add_dataset(dataset.label_options, dataset.owner_id,dataset.name, dataset.description)
     return {"dataset_id": dataset_id} 
 

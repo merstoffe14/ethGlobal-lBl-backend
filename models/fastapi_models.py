@@ -13,7 +13,7 @@ class Label(BaseModel):
     user_id: str
 
 class Dataset(BaseModel):
-    label_options: list
+    label_options: list[str]
     owner_id: str
     name: str
     description: str

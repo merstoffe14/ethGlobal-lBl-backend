@@ -15,9 +15,9 @@ class DataProcessor:
     def __init__(self):
         
         self.FERNET_KEY = os.getenv('FERNET_KEY')
-        self.BUCKET_SECRET_KEY = os.getenv('BUCKET_SECRET_KEY')
+        self.BUCKET_SECRET_KEY = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MjA4NTg3NTcsImNuZiI6eyJqa3UiOiIvY2VydHMiLCJraWQiOiI5aHE4bnlVUWdMb29ER2l6VnI5SEJtOFIxVEwxS0JKSFlNRUtTRXh4eGtLcCJ9LCJ0eXBlIjoiYXBpX3NlY3JldCIsImlkIjoxNTk5NywidXVpZCI6IjYxOTcxZTU5LTJkNmMtNGZmYS04ZDU4LTdjZTljOTExYWE4NiIsInBlcm0iOnsiYmlsbGluZyI6IioiLCJzZWFyY2giOiIqIiwic3RvcmFnZSI6IioiLCJ1c2VyIjoiKiJ9LCJhcGlfa2V5IjoiS1FMUlZIUVFJQ0lIR0xPSkpXRkgiLCJzZXJ2aWNlIjoic3RvcmFnZSIsInByb3ZpZGVyIjoiIn0.37fqQmHCN_gKE1p3dg8NEVUf-S09CP6yVsiBu-2mJKYnAr7q0TvnCJ-ZVfrm8ldfh8XE8ZYzHQjM8r3HZjDZZw"
         self.BUCKET_KEY_ID = os.getenv('BUCKET_KEY_ID')
-        self.BUCKET_ID = os.getenv('BUCKET_ID')
+        self.BUCKET_ID = "dcc169d5-76c4-4ed1-866e-50c734147b94"
         self.BUCKET_NAME = os.getenv('BUCKET_NAME')
         self.fernet = Fernet('F-seNZf8l9rB5EIVAdivwuZZrcC6g_WOh_Wksyt-K7g=')
         self.dbUtils = DbUtils()
@@ -30,12 +30,17 @@ class DataProcessor:
 
         
     def download_flow(self, cid):
+        print(f"start download {cid}")
         data = self.download_data(cid)
+        print("download complete")
         data = self.decrypt_data(data)
         url = self.img_to_b64(data)
         return url
 
     def upload_data(self, data, path = "/"):
+        print("Upload data running")
+        # print(self.BUCKET_ID)
+        # print(self.BUCKET_SECRET_KEY)
         url = f"https://api.chainsafe.io/api/v1/bucket/{self.BUCKET_ID}/upload"
         headers = {
             "Authorization": f"Bearer {self.BUCKET_SECRET_KEY}"
@@ -48,10 +53,10 @@ class DataProcessor:
         }
 
         response = requests.post(url, headers=headers, files=files, data=data)
-
         print(response.status_code)
+    
         respodata = response.json()
-        print(respodata)
+        # print(respodata)
         cid = respodata['files_details'][0]['cid']
         return cid
     
@@ -72,11 +77,14 @@ class DataProcessor:
     def encrypt_data(self, data):
         print("Encrypting data")
         encrypted_data = self.fernet.encrypt(data)
+        print("Encryption done")
         return encrypted_data
     
     def decrypt_data(self, data):
         print("Decrypting data")
         decrypted_data = self.fernet.decrypt(data)
+        print("Decrypting Done")
+
         return decrypted_data
 
     def img_to_b64(self, data) -> str:
