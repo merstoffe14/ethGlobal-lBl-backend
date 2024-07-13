@@ -13,6 +13,29 @@ class DbUtils:
         self.Session = sessionmaker(bind=self.engine)
         self.session = self.Session()
 
+    # Returns the {label: , confidence: , b64: } for the dataset
+    def end_labelling(self, dataset_id):
+        # Returns the {label: , confidence: , b64: } for the dataset
+        stmt = (
+            select(Data.data_id)
+            .where(Data.dataset_id == dataset_id)
+        )
+
+        data_ids = [data_id for data_id in self.session.scalars(stmt)]
+        labelled = []
+        for data_id in data_ids:
+            score = self.calculate_datapoint_accuracy(data_id)
+            label = score["label"]
+            confidence = score["confidence"]
+            ipfs_hash = self.get_ipfs_hash_for_datapoint(data_id)
+            b64 = self.dataPorcessor.download_flow(ipfs_hash)
+            labelled.append({"label": label, "confidence": confidence, "b64": b64})
+
+        return labelled
+
+
+
+
 
     def add_user(self, user_id):
         new_user = User(user_id=user_id)

@@ -15,6 +15,10 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler())
 
+@router.get("/endlabelling/{dataset_id}")
+async def end_labelling(dataset_id):
+    done_labels = dbUtils.end_labelling(dataset_id)
+    return done_labels
 
 @router.get("/checkUser/{user_id}")
 async def check_user(user_id):
