@@ -91,31 +91,23 @@ class DbUtils:
         return {"label" : maxLabel[0], "confidence" : maxScore / entries}
         
     def calculate_dataset_accuracy(self, dataset_id):
-        # Sum amount of labels for each datapoint
         stmt = (
-            select(Label.label)
-            .select_from(Label)
-            .join(Data, Label.data_id == Data.data_id)
+            select(Data.data_id)
             .where(Data.dataset_id == dataset_id)
         )
-
-        labels = [label for label in self.session.scalars(stmt)]
-        if len(labels) == 0:
+         
+        data_ids = [data_id for data_id in self.session.scalars(stmt)]
+        
+        if len(data_ids) == 0:
             return 0
         
-        entries = len(labels)
-        scoreList = {}
-        for label in labels:
-            if label in scoreList:
-                scoreList[label] += 1
-            else:
-                scoreList[label] = 1
-        
-        maxScore = max(scoreList.values())
-        maxLabel = [key for key in scoreList if scoreList[key] == maxScore]
+        total_score = 0
+        for data_id in data_ids:
+            score = self.calculate_datapoint_accuracy(data_id)
+            total_score += score["confidence"]
+        return total_score / len(data_ids)
 
-        return {"label" : maxLabel[0], "confidence" : maxScore / entries}
-
+    
     def count_labels_for_dataset(self, dataset_id):
         print(f"counting labels for {dataset_id}")
         stmt = (
