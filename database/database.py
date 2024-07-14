@@ -34,7 +34,14 @@ class DbUtils:
         return labelled
 
 
+    def count_labels_for_user(self, user_id):
+        stmt = (
+            select(Label.label)
+            .where(Label.user_id == user_id)
+        )
 
+        labels = [label for label in self.session.scalars(stmt)]
+        return len(labels)
 
 
     def add_user(self, user_id):

@@ -66,6 +66,11 @@ async def test(dataset_id):
 @router.get("/amountofvotesfordataset")
 # TODO:
 
+@router.get("/amountofvotesforuser/{user_id}")
+async def amount_of_votes_for_user(user_id):
+    return dbUtils.count_labels_for_user(user_id)
+
+
 
 
 @router.post("/upload_data")
