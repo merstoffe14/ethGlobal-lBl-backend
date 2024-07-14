@@ -159,7 +159,7 @@ async def label(labelData: Label):
 @router.post("/add_dataset")
 async def add_dataset(dataset: Dataset):
     print(dataset)
-    dataset_id = dbUtils.add_dataset(dataset.label_options, dataset.owner_id,dataset.name, dataset.description)
+    dataset_id = dbUtils.add_dataset(dataset.label_options, dataset.owner_id, dataset.name, dataset.description)
     return {"dataset_id": dataset_id} 
 
 

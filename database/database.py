@@ -88,7 +88,7 @@ class DbUtils:
             return False
         return True
     
-    def get_datasets_for_user(self,user_id):
+    def get_datasets_for_user(self, user_id):
         stmt = select(Dataset).where(Dataset.owner_id.in_([user_id]))
         return self.session.scalars(stmt).all()
     

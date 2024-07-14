@@ -18,7 +18,7 @@ class Dataset(Base):
 
     dataset_id = Column(Integer, primary_key=True, index=True)
     label_options = Column(JSON)
-    owner_id = Column(Integer)
+    owner_id = Column(String)
     name = Column(String)
     description = Column(String)
     thumbnail = Column(String)
