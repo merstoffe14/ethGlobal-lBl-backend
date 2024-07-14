@@ -31,7 +31,7 @@ from eth_utils import to_checksum_address
 
 @router.get("/endlabelling/{dataset_id}")
 async def end_labelling(dataset_id):
-    done_labels = dbUtils.end_labelling(dataset_id)
+    #done_labels = dbUtils.end_labelling(dataset_id)
 
     winners = dbUtils.get_winners() # [(address, score), ...]
 
@@ -69,8 +69,9 @@ async def end_labelling(dataset_id):
     signed_transaction = w3.eth.account.sign_transaction(final_transaction, private_key=owner.key)
     tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
 
+    return {"tx_hash": tx_hash.hex()}
 
-    return done_labels
+    #return done_labels
 
 @router.get("/checkUser/{user_id}")
 async def check_user(user_id):

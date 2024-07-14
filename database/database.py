@@ -29,7 +29,7 @@ class DbUtils:
             label = score["label"]
             confidence = score["confidence"]
             ipfs_hash = self.get_ipfs_hash_for_datapoint(data_id)
-            b64 = self.dataPorcessor.download_flow(ipfs_hash)
+            b64 = self.dataProcessor.download_flow(ipfs_hash)
             labelled.append({"label": label, "confidence": confidence, "b64": b64})
 
 
