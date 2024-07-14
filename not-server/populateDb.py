@@ -17,7 +17,7 @@ class Dataset(Base):
 
     dataset_id = Column(Integer, primary_key=True, index=True)
     label_options = Column(JSON)
-    owner_id = Column(Integer)
+    owner_id = Column(String)
     name = Column(String)
     description = Column(String)
     thumbnail = Column(String)
@@ -33,7 +33,7 @@ class Label(Base):
     label_id = Column(Integer, primary_key=True, index=True)
     data_id = Column(Integer)
     label = Column(String)
-    user_id = Column(Integer) # Who labelled it?
+    user_id = Column(String) # Who labelled it?
 
 
 #--------------------------------------------------------------------------------

@@ -34,7 +34,7 @@ class Label(Base):
     label_id = Column(Integer, primary_key=True, index=True)
     data_id = Column(Integer)
     label = Column(String)
-    user_id = Column(Integer) # Who labelled it?
+    user_id = Column(String) # Who labelled it?
 
 
 
