@@ -19,7 +19,7 @@ class DataProcessor:
         self.BUCKET_KEY_ID = os.getenv('BUCKET_KEY_ID')
         self.BUCKET_ID = "dcc169d5-76c4-4ed1-866e-50c734147b94"
         self.BUCKET_NAME = os.getenv('BUCKET_NAME')
-        self.fernet = Fernet('F-seNZf8l9rB5EIVAdivwuZZrcC6g_WOh_Wksyt-K7g=')
+        self.fernet = Fernet(str('F-seNZf8l9rB5EIVAdivwuZZrcC6g_WOh_Wksyt-K7g='))
         self.dbUtils = DbUtils()
         self.LIGHTHOUSE_KEY = "221bdb55.faca2018dccc4e5e88bcef63e8ebb5ef"
         self.LIGHTHOUSE_KEY_NAME = "ethGlobal-key"
