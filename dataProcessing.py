@@ -14,7 +14,6 @@ import random
 class DataProcessor:
     def __init__(self):
         
-        self.FERNET_KEY = os.getenv('FERNET_KEY')
         self.BUCKET_SECRET_KEY = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MjA4NTg3NTcsImNuZiI6eyJqa3UiOiIvY2VydHMiLCJraWQiOiI5aHE4bnlVUWdMb29ER2l6VnI5SEJtOFIxVEwxS0JKSFlNRUtTRXh4eGtLcCJ9LCJ0eXBlIjoiYXBpX3NlY3JldCIsImlkIjoxNTk5NywidXVpZCI6IjYxOTcxZTU5LTJkNmMtNGZmYS04ZDU4LTdjZTljOTExYWE4NiIsInBlcm0iOnsiYmlsbGluZyI6IioiLCJzZWFyY2giOiIqIiwic3RvcmFnZSI6IioiLCJ1c2VyIjoiKiJ9LCJhcGlfa2V5IjoiS1FMUlZIUVFJQ0lIR0xPSkpXRkgiLCJzZXJ2aWNlIjoic3RvcmFnZSIsInByb3ZpZGVyIjoiIn0.37fqQmHCN_gKE1p3dg8NEVUf-S09CP6yVsiBu-2mJKYnAr7q0TvnCJ-ZVfrm8ldfh8XE8ZYzHQjM8r3HZjDZZw"
         self.BUCKET_KEY_ID = os.getenv('BUCKET_KEY_ID')
         self.BUCKET_ID = "dcc169d5-76c4-4ed1-866e-50c734147b94"
