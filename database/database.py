@@ -5,6 +5,7 @@ from sqlalchemy import select
 import json
 
 
+
 class DbUtils:
 
     def __init__(self) -> None:
@@ -31,7 +32,38 @@ class DbUtils:
             b64 = self.dataPorcessor.download_flow(ipfs_hash)
             labelled.append({"label": label, "confidence": confidence, "b64": b64})
 
+
         return labelled
+
+    def get_winners(self, dataset_id):
+        # Query to get all labels for the given dataset
+        stmt = (
+            select(Label.user_id, Label.label, Data.data_id)
+            .join(Data, Label.data_id == Data.data_id)
+            .where(Data.dataset_id == dataset_id)
+        )
+        
+        labels = self.session.execute(stmt).all()
+        
+        # Dictionary to store correct labels count for each user
+        user_correct_labels = {}
+        
+        # Iterate through all labels
+        for user_id, label, data_id in labels:
+            # Calculate the correct label for this data point
+            correct_label = self.calculate_datapoint_accuracy(data_id)['label']
+            
+            # If the user's label matches the correct label, increment their count
+            if label == correct_label:
+                user_correct_labels[user_id] = user_correct_labels.get(user_id, 0) + 1
+        
+        # Convert the dictionary to a list of tuples, including only users with > 0 correct labels
+        winners = [(user_id, count) for user_id, count in user_correct_labels.items() if count > 0]
+        
+        # Sort the list by count in descending order
+        winners.sort(key=lambda x: x[1], reverse=True)
+        
+        return winners
 
 
     def count_labels_for_user(self, user_id):
